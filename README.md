@@ -16,7 +16,7 @@ That approach works, but it has several drawbacks. For example, each sensor may 
 - [Cooperative Scheduling](#cooperative-scheduling)
   - [How Cooperative Scheduling Is Organized Programmatically](#how-cooperative-scheduling-is-organized-programmatically)
 - [Combining Cooperative Scheduling with Multiprocessing](#combining-cooperative-scheduling-with-multiprocessing)
-- [How Data Exchange via Shared Memory Is Implemented](#How-Data-Exchange-via-Shared-Memory-Is-Implemented)
+  - [How Data Exchange via Shared Memory Is Implemented](#How-Data-Exchange-via-Shared-Memory-Is-Implemented)
 
 
 ## Cooperative scheduling
@@ -46,7 +46,7 @@ Since the sensor loop is organized as a generator, it stops at the yield Sleep(1
 This means the sensor is not running on every tick (loop iteration) — avoiding unnecessary energy and CPU consumption — but only when necessary for that specific sensor.
 
 Here is a very simple example of how cooperative scheduling is organized
-**[cooperative_scheduling_sensor_time.py](https://github.com/alexaibio/multitasking_python/blob/main/robotics_control_loop/v1_cooperative_scheduling/cooperative_scheduling_sensor_time.py)**
+**[cooperative_scheduling_sensor_time.py](https://github.com/alexaibio/robotics_concepts/blob/main/v1_cooperative_scheduling/cooperative_scheduling_sensor_time.py)**
 
 
 
@@ -57,7 +57,7 @@ Now, let's try to scale this approach up a little and demonstrate how a larger s
 In principle, the camera could also use a multiprocessing queue. However, since it sends a large amount of data every second, the overhead of using a queue would be enormous. Therefore, using shared memory is a more efficient way to handle such a high data throughput between processes.
 
 The full example is here:
-**[v2_interprocess_shared_memory](https://github.com/alexaibio/multitasking_python/tree/main/robotics_control_loop/v2_interprocess_shared_memory)**
+**[v2_interprocess_shared_memory](https://github.com/alexaibio/robotics_concepts/blob/main/v2_interprocess_shared_memory/interprocess_shared_memory.py)**
 
 
 ## How Data Exchange via Shared Memory Is Implemented
