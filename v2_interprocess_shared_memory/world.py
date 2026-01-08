@@ -67,10 +67,6 @@ class World:
         self._cleanup_resources.append((emitter, receiver))     # we need to clean shared memory at the end
         return emitter, receiver
 
-    @property
-    def should_stop(self) -> bool:
-        return self._stop_event.is_set()
-
     def run_blocking_sleep(self, fg_loops, bg_loops):
         print(f"[world] is starting")
 

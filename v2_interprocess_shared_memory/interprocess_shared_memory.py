@@ -53,8 +53,8 @@ class Clock:
 
 ### Define sensors
 class Sensor(ABC):
-    def __init__(self, sensor_id: str, transport: TransportMode, interval: float):
-        self.sensor_id = sensor_id
+    sensor_id: str
+    def __init__(self, transport: TransportMode, interval: float):
         self.transport = transport
         self.interval = interval
 
@@ -65,25 +65,28 @@ class Sensor(ABC):
 
 
 class TemperatureSensor(Sensor):
+    sensor_id = "temp_sensor"
     def __init__(self, transport: TransportMode, interval: float):
-        super().__init__(sensor_id="temp_sensor", transport=transport, interval=interval)
+        super().__init__(transport=transport, interval=interval)
         self.unit = "°C"
 
     def read(self) -> float:
-        return round(20 + random.uniform(-2, 5), 2)
+        return round(20 + random.uniform(-10, 10), 1)
 
 
 class CloudinessSensor(Sensor):
+    sensor_id="cloudy_sensor"
     def __init__(self, transport, interval: float):
-        super().__init__(sensor_id="cloudy_sensor", transport=transport, interval=interval)
+        super().__init__(transport=transport, interval=interval)
 
     def read(self) -> str:
         return random.choice(["Clear", "Partly Cloudy", "Cloudy", "Rain"])
 
 
 class CameraSensor(Sensor):
+    sensor_id="camera"
     def __init__(self, transport: TransportMode, interval: float):
-        super().__init__(sensor_id="camera", transport=transport, interval=interval)
+        super().__init__(transport=transport, interval=interval)
         self.width = 200
         self.height = 320
         self.unit = "frame"
@@ -97,7 +100,7 @@ class CameraSensor(Sensor):
 ######### Emitters / Receivers
 class SignalEmitter(Generic[T]):
     def emit(self, data: T) -> bool:
-        """Add data to a queue as a Message"""
+        """Wrap data to Message and add to a queue"""
         ...
 
 class SignalReceiver(Generic[T]):
@@ -336,14 +339,15 @@ class MultiprocessReceiver(SignalReceiver[T]):
 # Control Loops
 # ---------------------------------------------------------------------
 
-# helper function to check stop condition
+# normalization helper function to check stop condition
+# it makes while not should_stop(stop_event) working in all cases
 def should_stop(stop_event) -> bool:
     if stop_event is None:
         return False
     elif hasattr(stop_event, 'is_set'):
         return stop_event.is_set()
     else:
-        return stop_event
+        return stop_event   # already boolean
 
 
 def sensor_gen_fn(stop_event: mp.Event, emitter: SignalEmitter, sensor: Sensor):
