@@ -12,10 +12,6 @@ from collections import deque
 from dataclasses import dataclass
 
 
-# ---------------------------------------------------------------------------
-# Messaging primitives
-# ---------------------------------------------------------------------------
-
 @dataclass
 class Message:
     """What sensors send to controllers."""
